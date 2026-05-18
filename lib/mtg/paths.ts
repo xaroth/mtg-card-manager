@@ -66,3 +66,23 @@ export function syncStatePath(root: string) {
 export function catalogAssetFetchedAtPath(root: string) {
   return join(root, "catalog", "asset-fetched-at.json");
 }
+
+export function catalogScanImagesDir(root: string) {
+  return join(root, "catalog", "scan-images");
+}
+
+export function catalogScanImagePath(root: string, cardId: string) {
+  return join(catalogScanImagesDir(root), `${cardId}.jpg`);
+}
+
+export function catalogScanIndexDir(root: string) {
+  return join(root, "catalog", "scan-index");
+}
+
+export function catalogScanIndexManifestPath(root: string) {
+  return join(catalogScanIndexDir(root), "manifest.json");
+}
+
+export function catalogScanIndexHashesPath(root: string) {
+  return join(catalogScanIndexDir(root), "hashes.bin");
+}

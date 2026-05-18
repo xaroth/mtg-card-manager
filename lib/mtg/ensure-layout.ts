@@ -3,6 +3,8 @@ import { mkdir } from "fs/promises";
 import {
   catalogCardSymbolsDir,
   catalogCardsDir,
+  catalogScanImagesDir,
+  catalogScanIndexDir,
   catalogSetIconsDir,
   catalogSetsDir,
   collectionDir,
@@ -16,4 +18,6 @@ export async function ensureDataLayout(root: string) {
   await mkdir(catalogSetsDir(root), { recursive: true });
   await mkdir(catalogSetIconsDir(root), { recursive: true });
   await mkdir(catalogCardSymbolsDir(root), { recursive: true });
+  await mkdir(catalogScanImagesDir(root), { recursive: true });
+  await mkdir(catalogScanIndexDir(root), { recursive: true });
 }
