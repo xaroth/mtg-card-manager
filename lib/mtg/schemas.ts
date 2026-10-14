@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { SCAN_HASH_BITS } from "@/lib/scan/constants";
+
 export const binderEntrySchema = z.object({
   id: z.string().min(1),
   name: z.string(),
@@ -45,12 +47,31 @@ export const printsFileSchema = z.object({
 
 export type PrintsFile = z.infer<typeof printsFileSchema>;
 
+export const scanIndexImageKindSchema = z.enum([
+  "border_crop",
+  "normal",
+  "png",
+  "large",
+  "small",
+  "art_crop",
+]);
+
 export const appConfigSchema = z.object({
   defaultSearchQuery: z.string(),
   slowLaneMinIntervalMs: z.number().positive().optional(),
   fastLaneMinIntervalMs: z.number().positive().optional(),
   /** Min delay between SVG/CDN fetches during sync (set icons, card symbols). */
   assetLaneMinIntervalMs: z.number().positive().optional(),
+  /** Min delay between client `/api/scan` calls (ms). */
+  scanMinIntervalMs: z.number().int().positive().optional(),
+  /** Max Hamming distance for a dHash match (0–SCAN_HASH_BITS). */
+  scanMatchMaxHamming: z.number().int().min(0).max(SCAN_HASH_BITS).optional(),
+  scanMatchMaxResults: z.number().int().positive().optional(),
+  /** Client: min detection score (0–1) before attempting scan. */
+  scanDetectionMinScore: z.number().min(0).max(1).optional(),
+  /** Client: consecutive good frames before capture. */
+  scanStableFrames: z.number().int().positive().optional(),
+  scanIndexImageKind: scanIndexImageKindSchema.optional(),
 });
 
 export type AppConfig = z.infer<typeof appConfigSchema>;

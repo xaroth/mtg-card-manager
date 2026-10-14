@@ -19,6 +19,7 @@ import {
   IconCloudDownload,
   IconPhotoSearch,
   IconReportAnalytics,
+  IconScan,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -64,6 +65,13 @@ export default function AppSectionLayout({ children }: PropsWithChildren) {
         label="Search"
         leftSection={<IconPhotoSearch size={18} />}
         active={pathname.startsWith("/search")}
+      />
+      <NavLink
+        component={Link}
+        href="/scan"
+        label="Scan"
+        leftSection={<IconScan size={18} />}
+        active={pathname.startsWith("/scan")}
       />
       <NavLink
         component={Link}

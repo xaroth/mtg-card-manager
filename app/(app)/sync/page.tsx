@@ -65,11 +65,12 @@ export default function SyncPage() {
     <Stack gap="md">
       <Title order={2}>Sync</Title>
       <Text size="sm" c="dimmed">
-        Refreshes catalog cards, Scryfall sets, set icons, symbology JSON, and card-symbol SVGs under your
-        MTG_DATA_DIR. Each run skips assets last fetched within 12 hours unless you use{" "}
+        Refreshes catalog cards, Scryfall sets, set icons, symbology JSON, card-symbol SVGs, and the
+        scan visual index under your MTG_DATA_DIR. Each run skips assets last fetched within 12 hours
+        unless you use{" "}
         <Code>pnpm sync -- --full</Code> or <Code>pnpm sync:full</Code>. Card JSON only:{" "}
-        <Code>pnpm sync -- --cards-only</Code> (with <Code>--full</Code> if needed). Prefer{" "}
-        <Code>pnpm sync</Code> for long runs.
+        <Code>pnpm sync -- --cards-only</Code> (with <Code>--full</Code> if needed). Scan index only:{" "}
+        <Code>pnpm scan-index</Code>. Prefer <Code>pnpm sync</Code> for long runs.
       </Text>
       <Group>
         <Button loading={busy} onClick={() => void trigger()}>

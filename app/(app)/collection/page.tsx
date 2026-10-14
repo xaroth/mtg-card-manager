@@ -24,6 +24,7 @@ import {
   Title,
 } from "@mantine/core";
 import { DataTable, type DataTableColumn } from "mantine-datatable";
+import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconEdit, IconPlaylistAdd, IconTrash } from "@tabler/icons-react";
 
@@ -181,6 +182,7 @@ export default function CollectionPage() {
   const [binderIds, setBinderIds] = useState<{ value: string; label: string }[]>([]);
   const [filter, setFilter] = useState<"all" | "owned" | "wishlist">("all");
   const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText] = useDebouncedValue(searchText, 300);
   const [limitSets, setLimitSets] = useState<string[]>([]);
   const [groupBy, setGroupBy] = useState<"none" | "set">("none");
   const [expandedSets, setExpandedSets] = useState<string[]>([]);
@@ -245,8 +247,8 @@ export default function CollectionPage() {
   }, [typeFiltered, limitSets]);
 
   const searchFiltered = useMemo(
-    () => limitSetsFiltered.filter((r) => matchesTokens(r, searchText)),
-    [limitSetsFiltered, searchText],
+    () => limitSetsFiltered.filter((r) => matchesTokens(r, debouncedSearchText)),
+    [limitSetsFiltered, debouncedSearchText],
   );
 
   const sortedFlat = useMemo(() => sortPrintsCollection(searchFiltered), [searchFiltered]);

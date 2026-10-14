@@ -12,7 +12,9 @@
     "sync:cards": "tsx scripts/sync.ts --cards-only",
     "sync:cards:full": "tsx scripts/sync.ts --cards-only --full",
     "import-legacy": "tsx scripts/import-legacy.ts",
-    "move-storage-to-binder": "tsx scripts/move-storage-to-binder.ts"
+    "move-storage-to-binder": "tsx scripts/move-storage-to-binder.ts",
+    "scan-index": "tsx scripts/scan-index.ts",
+    "scan-index:full": "tsx scripts/scan-index.ts --full"
   },
   "dependencies": {
     "@mantine/core": "^8.3.9",
@@ -25,6 +27,7 @@
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "sharp": "^0.34.2",
     "tsx": "^4.19.4",
     "zod": "^3.24.4"
   },

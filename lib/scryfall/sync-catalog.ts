@@ -17,6 +17,8 @@ import {
   catalogSymbologyPath,
   syncStatePath,
 } from "@/lib/mtg/paths";
+import { buildScanIndex } from "@/lib/scan/build-index";
+import { invalidateScanIndexCache } from "@/lib/scan/match";
 
 export type SyncProgress = (message: string) => void;
 
@@ -52,6 +54,10 @@ export type SyncRunState = {
   symbologyJsonFetched: boolean;
   cardSymbolsFetched: number;
   cardSymbolsSkipped: number;
+  scanIndexEntries: number;
+  scanImagesFetched: number;
+  scanImagesSkipped: number;
+  scanIndexPruned: number;
   errors: string[];
 };
 
@@ -418,6 +424,10 @@ export async function runSync(
     await saveAssetFetchedAt(root, assetMeta);
   }
 
+  log("Scan index…");
+  const scanIndex = await buildScanIndex(root, { full, onProgress: log });
+  invalidateScanIndexCache();
+
   const state: SyncRunState = {
     lastSyncAt: new Date().toISOString(),
     full,
@@ -432,14 +442,18 @@ export async function runSync(
     symbologyJsonFetched,
     cardSymbolsFetched,
     cardSymbolsSkipped,
-    errors,
+    scanIndexEntries: scanIndex.hashesBuilt,
+    scanImagesFetched: scanIndex.imagesFetched,
+    scanImagesSkipped: scanIndex.imagesSkipped,
+    scanIndexPruned: scanIndex.prunedImages,
+    errors: [...errors, ...scanIndex.errors],
   };
 
   await writeFile(syncStatePath(root), `${JSON.stringify(state, null, 2)}\n`, "utf-8");
   log(
     cardsOnly
-      ? `Done (cards-only). Cards ${cardsFetched} fetched / ${cardsSkipped} skipped, errors ${errors.length}`
-      : `Done. Cards ${cardsFetched} fetched / ${cardsSkipped} skipped, sets ${setsFetched}/${setsSkipped}, icons ${iconsFetched}/${iconsSkipped}, symbology JSON ${symbologyJsonFetched ? "refreshed" : "skipped"}, symbols ${cardSymbolsFetched}/${cardSymbolsSkipped}, errors ${errors.length}`,
+      ? `Done (cards-only). Cards ${cardsFetched} fetched / ${cardsSkipped} skipped, scan index ${scanIndex.hashesBuilt} entries, errors ${state.errors.length}`
+      : `Done. Cards ${cardsFetched} fetched / ${cardsSkipped} skipped, sets ${setsFetched}/${setsSkipped}, icons ${iconsFetched}/${iconsSkipped}, symbology JSON ${symbologyJsonFetched ? "refreshed" : "skipped"}, symbols ${cardSymbolsFetched}/${cardSymbolsSkipped}, scan index ${scanIndex.hashesBuilt} entries, errors ${state.errors.length}`,
   );
   return state;
 }

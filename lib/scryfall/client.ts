@@ -81,7 +81,7 @@ export async function scryfallAssetGet(url: string): Promise<Response> {
   return assetLane(() =>
     fetch(url, {
       headers: {
-        Accept: "image/svg+xml,*/*;q=0.8",
+        Accept: "image/jpeg,image/png,image/webp,image/svg+xml,*/*;q=0.8",
         "User-Agent": USER_AGENT,
       },
       cache: "no-store",
